@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <title>TruckIS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/media/css/bootstrap.css" rel="stylesheet">
+  <link href="/media/css/bootstrap-responsive.css" rel="stylesheet">
+ </head>
+ <body>
+  <div class="navbar navbar-fixed-top">
+   <div class="navbar-inner">
+    <div class="container">
+     <a class="brand" href="#">Mach AD</a>
+    </div>
+   </div>
+  </div>
+  
+  <div class="container">
+
+   <div class="hero-unit">
+    <form action="/" method="post" class="form-horizontal">
+     {% csrf_token %}
+     <div class="control-group">
+      <label class="control-label" for="pin">PIN:</label>
+      <div class="controls">
+       <input type="text" class="input-xlarge" id="pin" name="pin">
+      </div>
+     </div>
+     <div class="control-group">
+      <label class="control-label" for="password">Heslo:</label>
+      <div class="controls">
+       <input type="password" class="input-xlarge" id="password" name="password">
+      </div>
+     </div>
+     <div class="form-actions">
+      <button type="submit" class="btn btn-large">Přihlásit</button>
+     </div>     
+    </form>
+   </div>
+
+   <hr>
+
+   <footer>
+    <p>&copy; Mach AD 2012</p>
+   </footer>
+
+  </div>
+
+  <script src="/media/js/bootstrap.js"></script>
+ </body>
+</html>
