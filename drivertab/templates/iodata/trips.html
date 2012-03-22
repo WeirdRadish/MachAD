@@ -77,9 +77,10 @@
       </div>
 	  
      </div>
-     {% if note %}
      <div class="row-fluid">
+      {% if note %}
       Poznamka: {{ note }}<br/>
+      {% endif %}
       {% if loadingDateTime %}
 	  Naloženo: {{ loadedQuantity }} {{ unit }}, {{ loadingDateTime|date:"d.m.y: H:i" }}, {{ loadingDriver }}<br/>
       {% endif %}	  
@@ -87,7 +88,6 @@
 	  Vyloženo: {{ unloadedQuantity }} {{ unit }}, {{ unloadingDateTime|date:"d.m.y: H:i" }}, {{ unloadingDriver }}</br>
       {% endif %}
      </div> 
-     {% endif %}
 	 
      <div class="well load">
       <form action="/trips/" method="post" class="form-horizontal">
