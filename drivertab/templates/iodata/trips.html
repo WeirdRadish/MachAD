@@ -4,15 +4,10 @@
   <meta charset="utf-8">
   <title>TruckIS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/media/css/bootstrap.css" rel="stylesheet">
-  <link href="/media/css/bootstrap-responsive.css" rel="stylesheet">
-  <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
+  <link href="media/css/bootstrap.css" rel="stylesheet">
+  <link href="media/css/bootstrap-responsive.css" rel="stylesheet">
   <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
-  <script src="/media/js/bootstrap.js"></script>
+  <script src="media/js/bootstrap.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
       $('div.load').hide();
@@ -43,34 +38,35 @@
    <div class="navbar-inner">
     <div class="container">
      <a class="brand" href="#">Mach AD</a>
-     <div class="nav-collapse">
-      <ul class="nav">
-       <li class="active"><a href="#">{{ driver_name }}</a></li>
-       <li class="active"><a href="/logout/">Logout</a></li>
-      </ul>
-     </div><!--/.nav-collapse -->
     </div>
    </div>
   </div>
   
   <div class="container">
+   
+   <div class="alert alert-info">
+    Řidič: {{ driver_name }} &nbsp;&nbsp;&nbsp;&nbsp;<a href="/logout/" class="btn btn-warning">Odhlášení</a>
+   </div>
+   <div class="alert alert-error">
+    {% error %}
+   </div>
 
 {% for customer, endCustomer, truck, fromPlace, toPlace, unit, loadedQuantity, unloadedQuantity, material, startDate,  deliveryNumber, loadingDriver, loadingDateTime, unloadingDriver, unloadingDateTime, note, id in tripList %}
     <div class="well trip" id="{{ id }}">
      <div class="row-fluid">
-      <div class="span2">
+      <div class="span4">
        Datum: {{ startDate }}<br/>
        Odkud: {{ fromPlace }}<br/>
        Kam: {{ toPlace }}<br/>
 	   Vůz: {{ truck }}<br/>
       </div>
-      <div class="span2">
+      <div class="span4">
        Dodavatel: {{ customer }}<br/>
        Odběratel: {{ endCustomer }}<br/>
        Materiál: {{ material }}<br/>
        Dodací list: {% if deliveryNumber %}{{ deliveryNumber }}{% endif %}<br/>
       </div>
-      <div class="span2">
+      <div class="span3">
        <button class="{% if loadingDateTime %}disabled{% else %}{% if loaded %}disabled{% else %}btn-load{% endif %} btn-info{% endif %} btn" href="#">{% if loadingDateTime %}Naloženo{% else %}Nakládka{% endif %}</button>
        <br/><br/>
        <button class="{% if not loadingDateTime%}disabled btn-info{% else %}btn-info btn-unload{% endif %} btn" href="#">Vykládka</button>
@@ -197,19 +193,19 @@
 {% for customer, endCustomer, truck, fromPlace, toPlace, unit, loadedQuantity, unloadedQuantity, material, startDate,  deliveryNumber, loadingDriver, loadingDateTime, unloadingDriver, unloadingDateTime, note, id in finishedTripList %}
     <div class="well trip" id="{{ id }}">
      <div class="row-fluid">
-      <div class="span2">
+      <div class="span4">
        Datum: {{ startDate }}<br/>
        Odkud: {{ fromPlace }}<br/>
        Kam: {{ toPlace }}<br/>
 	   Vůz: {{ truck }}<br/>
       </div>
-      <div class="span2">
+      <div class="span4">
        Dodavatel: {{ customer }}<br/>
        Odběratel: {{ endCustomer }}<br/>
        Materiál: {{ material }}<br/>
        Dodací list: {{ deliveryNumber }}<br/>
       </div>
-      <div class="span2">
+      <div class="span4">
        <button class="disabled btn" href="#">Naloženo</button>
        <br/><br/>
        <button class="disabled btn" href="#">Vyloženo</button>
