@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <title>TruckIS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/media/css/bootstrap.css" rel="stylesheet">
-  <link href="/media/css/bootstrap-responsive.css" rel="stylesheet">
+  <link href="media/css/bootstrap.css" rel="stylesheet">
+  <link href="media/css/bootstrap-responsive.css" rel="stylesheet">
  </head>
  <body>
   <div class="navbar navbar-fixed-top">
@@ -18,7 +18,11 @@
   
   <div class="container">
 
+    
    <div class="hero-unit">
+    <div class="alert alert-error">
+     {% error %}
+    </div>
     <form action="/" method="post" class="form-horizontal">
      {% csrf_token %}
      <div class="control-group">
@@ -47,6 +51,6 @@
 
   </div>
 
-  <script src="/media/js/bootstrap.js"></script>
+  <script src="media/js/bootstrap.js"></script>
  </body>
 </html>
