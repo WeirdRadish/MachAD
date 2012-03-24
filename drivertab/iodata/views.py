@@ -28,7 +28,10 @@ def login(request):
                 request.session['context']['logged_driver'] = driver.id
                 request.session['context']['driver_name'] = driver.firstName+' '+driver.lastName
             
-                return HttpResponseRedirect ('/trips/')
+                try:
+                    del request.session['context']['error']
+                finally:
+                    return HttpResponseRedirect ('/trips/')
             else:
                 request.session['context']['error'] = 'Špatné heslo!'
         
@@ -37,10 +40,18 @@ def login(request):
             request.session['context']['error'] = 'Špatný PIN!'
     
     if request.session['context']['logged_in'] == False:
+        
+        fullcontext = {'csrftoken':csrf(request)}
+        fullcontext.update(request.session['context'])
+        
         return render_to_response('iodata/login.html',
+                                  fullcontext,
                                   context_instance=RequestContext(request))
     else:
-        return HttpResponseRedirect ('/trips/')
+        try:
+            del request.session['context']['error']
+        finally:
+            return HttpResponseRedirect ('/trips/')
 
 def logout (request):
     try:
@@ -133,17 +144,20 @@ def trips(request):
                                 trip.loadingDriver = driver
                                 trip.save()
                                 request.session['loaded'] = True
-                                makeTripList()
+                                try:
+                                    del request.session['context']['error']
+                                finally:
+                                    makeTripList()
                             except (ValueError, IntegrityError):
-                                request.session['context']['error'] = 'Špatně zadané údaje'
+                                request.session['context']['error'] = 'Špatně zadané údaje!'
                                 
                         else:
-                            request.session['context']['error'] = 'Špatné heslo'
+                            request.session['context']['error'] = 'Špatné heslo!'
                     else:
-                        request.session['context']['error'] = 'Špatný řidič'
+                        request.session['context']['error'] = 'Špatný řidič!'
                     
                 except Driver.DoesNotExist:
-                    request.session['context']['error'] = 'Špatný PIN'
+                    request.session['context']['error'] = 'Špatný PIN!'
                             
 
                     
@@ -163,16 +177,19 @@ def trips(request):
                                 trip.finished = True
                                 trip.save()
                                 request.session['loaded'] = False
-                                makeTripList()
+                                try:
+                                    del request.session['context']['error']
+                                finally:
+                                    makeTripList()
                             except (ValueError, IntegrityError):
-                                request.session['context']['error'] = 'Špatně zadané údaje'
+                                request.session['context']['error'] = 'Špatně zadané údaje!'
                         else:
-                            request.session['context']['error'] = 'Špatné heslo'
+                            request.session['context']['error'] = 'Špatné heslo!'
                     else:
-                        request.session['context']['error'] = 'Špatný řidič'
+                        request.session['context']['error'] = 'Špatný řidič!'
     
                 except Driver.DoesNotExist:
-                    request.session['context']['error'] = 'Špatný PIN'
+                    request.session['context']['error'] = 'Špatný PIN!'
     
         fullcontext = {'csrftoken':csrf(request),
                        'loaded':request.session['loaded']}
