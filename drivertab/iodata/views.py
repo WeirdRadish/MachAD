@@ -6,6 +6,7 @@ from django.core.context_processors import csrf
 from django.http import HttpResponseRedirect
 from django.db.models import Q
 from django.db import IntegrityError
+from django.forms import ValidationError
 from drivertab.iodata.models import Driver, Trip
 
 import datetime
@@ -121,7 +122,13 @@ def trips(request):
             request.session['context']['today'] = today
             request.session['context']['tripList'] = tripList
             request.session['context']['finishedTripList'] = finishedTripList
-                               
+    
+        def toFloat(unicode):
+            try:
+                return float(unicode)
+            except ValueError:
+                split = unicode.split(',')
+                return float(split[0]+'.'+split[1])                           
 
         makeTripList()
 
@@ -145,7 +152,7 @@ def trips(request):
                             try:
                                 loadingDateTime = request.POST.get('loadingDate')+':'+request.POST.get('loadingTime')
                                 trip.loadingDateTime = datetime.datetime.strptime(loadingDateTime, "%d.%m.%y:%H:%M")
-                                trip.loadedQuantity = request.POST.get('loadedQuantity')
+                                trip.loadedQuantity = toFloat(request.POST.get('loadedQuantity'))
                                 trip.deliveryNumber = request.POST.get('deliveryNumber')
                                 trip.loadingDriver = driver
                                 trip.save()
@@ -155,7 +162,7 @@ def trips(request):
                                 except KeyError:
                                     pass
                                 makeTripList()
-                            except (ValueError, IntegrityError):
+                            except (ValueError, ValidationError, IntegrityError):
                                 request.session['context']['error'] = 'Špatně zadané údaje!'
                                 
                         else:

@@ -1,0 +1,11 @@
+#password {
+    -webkit-text-security: disc;
+}
+
+.load_unload {
+  float: right;
+}
+
+#poznamka {
+  padding-top:15px;
+}

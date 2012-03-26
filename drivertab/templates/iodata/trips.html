@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="/media/css/bootstrap.css" rel="stylesheet">
   <link href="/media/css/bootstrap-responsive.css" rel="stylesheet">
+  <link href="/media/css/drivertab.css" rel="stylesheet">
   <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
   <script src="/media/js/bootstrap.js"></script>
   <script type="text/javascript">
@@ -69,13 +70,13 @@
        Dodací list: {% if deliveryNumber %}{{ deliveryNumber }}{% endif %}<br/>
       </div>
       <div class="span3">
-       <button class="{% if loadingDateTime %}disabled{% else %}{% if loaded %}disabled{% else %}btn-load{% endif %} btn-info{% endif %} btn" href="#">{% if loadingDateTime %}Naloženo{% else %}Nakládka{% endif %}</button>
+       <button class="{% if loadingDateTime %}disabled{% else %}{% if loaded %}disabled{% else %}btn-load{% endif %} btn-info{% endif %} btn load_unload" href="#">{% if loadingDateTime %}Naloženo{% else %}Nakládka{% endif %}</button>
        <br/><br/>
-       <button class="{% if not loadingDateTime%}disabled btn-info{% else %}btn-info btn-unload{% endif %} btn" href="#">Vykládka</button>
+       <button class="{% if not loadingDateTime%}disabled btn-info{% else %}btn-info btn-unload{% endif %} btn load_unload" href="#">Vykládka</button>
       </div>
 	  
      </div>
-     <div class="row-fluid">
+     <div class="row-fluid" id="poznamka">
       {% if note %}
       Poznamka: {{ note }}<br/>
       {% endif %}
@@ -121,13 +122,13 @@
        <div class="control-group">
         <label class="control-label" for="pin">PIN:</label>
         <div class="controls">
-         <input type="text" class="input-xlarge" id="pin" name="pin">
+         <input type="number" class="input-xlarge" id="pin" name="pin">
         </div>
        </div>
        <div class="control-group">
         <label class="control-label" for="password">Heslo:</label>
         <div class="controls">
-         <input type="password" class="input-xlarge" id="password" name="password">
+         <input type="number" class="input-xlarge" id="password" name="password">
         </div>
        </div>
        <div class="form-actions">
@@ -171,13 +172,13 @@
        <div class="control-group">
         <label class="control-label" for="pin">PIN:</label>
         <div class="controls">
-         <input type="text" class="input-xlarge" id="pin" name="pin">
+         <input type="number" class="input-xlarge" id="pin" name="pin">
         </div>
        </div>
        <div class="control-group">
         <label class="control-label" for="password">Heslo:</label>
         <div class="controls">
-         <input type="password" class="input-xlarge" id="password" name="password">
+         <input type="number" class="input-xlarge" id="password" name="password">
         </div>
        </div>
        <div class="form-actions">
