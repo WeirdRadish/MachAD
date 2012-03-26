@@ -186,7 +186,7 @@ def trips(request):
                             try:
                                 unloadingDateTime = request.POST.get('unloadingDate')+':'+request.POST.get('unloadingTime')
                                 trip.unloadingDateTime = datetime.datetime.strptime(unloadingDateTime, "%d.%m.%y:%H:%M")
-                                trip.unloadedQuantity = request.POST.get('unloadedQuantity')
+                                trip.unloadedQuantity = toFloat(request.POST.get('unloadedQuantity'))
                                 trip.unloadingDriver = driver
                                 trip.finished = True
                                 trip.save()
