@@ -70,13 +70,13 @@
        Dodací list: {% if deliveryNumber %}{{ deliveryNumber }}{% endif %}<br/>
       </div>
       <div class="span3">
-       <button class="{% if loadingDateTime %}disabled{% else %}{% if loaded %}disabled{% else %}btn-load{% endif %} btn-info{% endif %} btn load_unload" href="#">{% if loadingDateTime %}Naloženo{% else %}Nakládka{% endif %}</button>
+       <button class="{% if loadingDateTime %}disabled{% else %}{% if loaded %}disabled{% else %}btn-load{% endif %} btn-info{% endif %} btn load_unload">{% if loadingDateTime %}Naloženo{% else %}Nakládka{% endif %}</button>
        <br/><br/>
-       <button class="{% if not loadingDateTime%}disabled btn-info{% else %}btn-info btn-unload{% endif %} btn load_unload" href="#">Vykládka</button>
+       <button class="{% if not loadingDateTime%}disabled btn-info{% else %}btn-info btn-unload{% endif %} btn load_unload">Vykládka</button>
       </div>
 	  
      </div>
-     <div class="row-fluid" id="poznamka">
+     <div class="row-fluid note">
       {% if note %}
       Poznamka: {{ note }}<br/>
       {% endif %}
@@ -84,7 +84,7 @@
 	  Naloženo: {{ loadedQuantity }} {{ unit }}, {{ loadingDateTime|date:"d.m.y: H:i" }}, {{ loadingDriver }}<br/>
       {% endif %}	  
       {% if unloadingDateTime %}
-	  Vyloženo: {{ unloadedQuantity }} {{ unit }}, {{ unloadingDateTime|date:"d.m.y: H:i" }}, {{ unloadingDriver }}</br>
+	  Vyloženo: {{ unloadedQuantity }} {{ unit }}, {{ unloadingDateTime|date:"d.m.y: H:i" }}, {{ unloadingDriver }}<br/>
       {% endif %}
      </div> 
 	 
@@ -93,42 +93,42 @@
       {% csrf_token %}	
        <h3>Nakládka</h3>
        <div class="control-group">
-        <label class="control-label" for="date">Datum:</label>
+        <label class="control-label" for="date{{ id }}">Datum:</label>
         <div class="controls">
-         <input type="text" class="input-xlarge" id="date" name="loadingDate" value="{{ today|date:"d.m.y" }}">
+         <input type="text" class="input-xlarge" id="date{{ id }}" name="loadingDate" value="{{ today|date:"d.m.y" }}">
 		 <span class="help-inline">dd.mm.rr</span>
         </div>
        </div>
        <div class="control-group">
-        <label class="control-label" for="time">Čas:</label>
+        <label class="control-label" for="time{{ id }}">Čas:</label>
         <div class="controls">
-         <input type="text" class="input-xlarge" id="time" name="loadingTime" value="{{ today|date:"H:i" }}">
+         <input type="text" class="input-xlarge" id="time{{ id }}" name="loadingTime" value="{{ today|date:"H:i" }}">
 		 <span class="help-inline">hh:mm</span>
         </div>
        </div>
        <div class="control-group">
-        <label class="control-label" for="quantity">Množství:</label>
+        <label class="control-label" for="quantity{{ id }}">Množství:</label>
         <div class="controls">
-         <input type="number" class="input-xlarge required" id="quantity" name="loadedQuantity">
+         <input type="number" class="input-xlarge required" id="quantity{{ id }}" name="loadedQuantity">
 		 <span class="help-inline">{{ unit }}</span>
         </div>
        </div>
        <div class="control-group">
-        <label class="control-label" for="ordernumber">Dodací list:</label>
+        <label class="control-label" for="ordernumber{{ id }}">Dodací list:</label>
         <div class="controls">
-         <input type="number" class="input-xlarge" id="ordernumber" name="deliveryNumber">
+         <input type="number" class="input-xlarge" id="ordernumber{{ id }}" name="deliveryNumber">
         </div>
        </div>
        <div class="control-group">
-        <label class="control-label" for="pin">PIN:</label>
+        <label class="control-label" for="pin{{ id }}">PIN:</label>
         <div class="controls">
-         <input type="number" class="input-xlarge" id="pin" name="pin">
+         <input type="number" class="input-xlarge" id="pin{{ id }}" name="pin">
         </div>
        </div>
        <div class="control-group">
-        <label class="control-label" for="password">Heslo:</label>
+        <label class="control-label" for="password{{ id }}">Heslo:</label>
         <div class="controls">
-         <input type="number" class="input-xlarge password" id="password" name="password">
+         <input type="number" class="input-xlarge password" id="password{{ id }}" name="password">
         </div>
        </div>
        <div class="form-actions">
@@ -143,42 +143,42 @@
       {% csrf_token %}
        <h3>Vykládka</h3>
        <div class="control-group">
-        <label class="control-label" for="date">Datum:</label>
+        <label class="control-label" for="UNdate{{ id }}">Datum:</label>
         <div class="controls">
-         <input type="text" class="input-xlarge" id="date" name="unloadingDate" value="{{ today|date:"d.m.y" }}">
+         <input type="text" class="input-xlarge" id="UNdate{{ id }}" name="unloadingDate" value="{{ today|date:"d.m.y" }}">
 		 <span class="help-inline">dd.mm.rr</span>
         </div>
        </div>
        <div class="control-group">
-        <label class="control-label" for="time">Čas:</label>
+        <label class="control-label" for="UNtime{{ id }}">Čas:</label>
         <div class="controls">
-         <input type="text" class="input-xlarge" id="time" name="unloadingTime" value="{{ today|date:"H:i" }}">
+         <input type="text" class="input-xlarge" id="UNtime{{ id }}" name="unloadingTime" value="{{ today|date:"H:i" }}">
 		 <span class="help-inline">hh:mm</span>
         </div>
        </div>
        <div class="control-group">
-        <label class="control-label" for="quantity">Množství:</label>
+        <label class="control-label" for="UNquantity{{ id }}">Množství:</label>
         <div class="controls">
-         <input type="text" readonly="yes" class="input-xlarge" id="quantity" name="unloadedQuantity" value="{{ loadedQuantity }}">
+         <input type="text" readonly="readonly" class="input-xlarge" id="UNquantity{{ id }}" name="unloadedQuantity" value="{{ loadedQuantity }}">
 		 <span class="help-inline">{{ unit }}</span>
         </div>
        </div>
        <div class="control-group">
-        <label class="control-label" for="ordernumber">Dodací list:</label>
+        <label class="control-label" for="UNordernumber{{ id }}">Dodací list:</label>
         <div class="controls">
-         <input type="text" readonly="yes" class="input-xlarge" id="ordernumber" value="{{ deliveryNumber }}">
+         <input type="text" readonly="readonly" class="input-xlarge" id="UNordernumber{{ id }}" value="{{ deliveryNumber }}">
         </div>
        </div>
        <div class="control-group">
-        <label class="control-label" for="pin">PIN:</label>
+        <label class="control-label" for="UNpin{{ id }}">PIN:</label>
         <div class="controls">
-         <input type="number" class="input-xlarge" id="pin" name="pin">
+         <input type="number" class="input-xlarge" id="UNpin{{ id }}" name="pin">
         </div>
        </div>
        <div class="control-group">
-        <label class="control-label" for="password">Heslo:</label>
+        <label class="control-label" for="UNpassword{{ id }}">Heslo:</label>
         <div class="controls">
-         <input type="number" class="input-xlarge password" id="password" name="password">
+         <input type="number" class="input-xlarge password" id="UNpassword{{ id }}" name="password">
         </div>
        </div>
        <div class="form-actions">
@@ -208,17 +208,19 @@
        Materiál: {{ material }}<br/>
        Dodací list: {{ deliveryNumber }}<br/>
       </div>
-      <div class="span4">
-       <button class="disabled btn" href="#">Naloženo</button>
+      <div class="span3">
+       <button class="disabled btn load_unload">Naloženo</button>
        <br/><br/>
-       <button class="disabled btn" href="#">Vyloženo</button>
+       <button class="disabled btn load_unload">Vyloženo</button>
       </div>
 	  
      </div>
-     <div class="row-fluid">
+     <div class="row-fluid note">
+     {% if note %}
       Poznamka: {{ note }}<br/>
+	 {% endif %}
       Naloženo: {{ loadedQuantity }} {{ unit }}, {{ loadingDateTime|date:"d.m.y: H:i" }}, {{ loadingDriver }}<br/>
-      Vyloženo: {{ unloadedQuantity }} {{ unit }}, {{ unloadingDateTime|date:"d.m.y: H:i" }}, {{ unloadingDriver }}</br>
+      Vyloženo: {{ unloadedQuantity }} {{ unit }}, {{ unloadingDateTime|date:"d.m.y: H:i" }}, {{ unloadingDriver }}<br/>
      </div> 
     </div>
 
