@@ -72,7 +72,7 @@
       <div class="span3">
        <button class="{% if loadingDateTime %}disabled{% else %}{% if loaded %}disabled{% else %}btn-load{% endif %} btn-info{% endif %} btn load_unload">{% if loadingDateTime %}Naloženo{% else %}Nakládka{% endif %}</button>
        <br/><br/>
-       <button class="{% if not loadingDateTime%}disabled btn-info{% else %}btn-info btn-unload{% endif %} btn load_unload">Vykládka</button>
+       <button class="{% if not loadingDateTime%}disabled btn-info{% else %}btn-warning btn-unload{% endif %} btn load_unload">Vykládka</button>
       </div>
 	  
      </div>
@@ -89,27 +89,27 @@
      </div> 
 	 
      <div class="well load">
-      <form action="/trips/" method="post" class="form-horizontal">
+      <form novalidate action="/trips/" method="post" class="form-horizontal">
       {% csrf_token %}	
        <h3>Nakládka</h3>
        <div class="control-group">
         <label class="control-label" for="date{{ id }}">Datum:</label>
         <div class="controls">
-         <input type="text" class="input-xlarge" id="date{{ id }}" name="loadingDate" value="{{ today|date:"d.m.y" }}">
+         <input type="text" readonly="readonly" class="input-xlarge" id="date{{ id }}" name="loadingDate" value="{{ today|date:"d.m.y" }}">
 		 <span class="help-inline">dd.mm.rr</span>
         </div>
        </div>
        <div class="control-group">
         <label class="control-label" for="time{{ id }}">Čas:</label>
         <div class="controls">
-         <input type="text" class="input-xlarge" id="time{{ id }}" name="loadingTime" value="{{ today|date:"H:i" }}">
+         <input type="text" readonly="readonly" class="input-xlarge" id="time{{ id }}" name="loadingTime" value="{{ today|date:"H:i" }}">
 		 <span class="help-inline">hh:mm</span>
         </div>
        </div>
        <div class="control-group">
         <label class="control-label" for="quantity{{ id }}">Množství:</label>
         <div class="controls">
-         <input type="number" class="input-xlarge required" id="quantity{{ id }}" name="loadedQuantity">
+         <input type="number" class="input-xlarge required" id="quantity{{ id }}" name="loadedQuantity" step="0.01" min="0" pattern="[0-9]{2}[.,][0-9]{2}">
 		 <span class="help-inline">{{ unit }}</span>
         </div>
        </div>
@@ -145,14 +145,14 @@
        <div class="control-group">
         <label class="control-label" for="UNdate{{ id }}">Datum:</label>
         <div class="controls">
-         <input type="text" class="input-xlarge" id="UNdate{{ id }}" name="unloadingDate" value="{{ today|date:"d.m.y" }}">
+         <input type="text" readonly="readonly" class="input-xlarge" id="UNdate{{ id }}" name="unloadingDate" value="{{ today|date:"d.m.y" }}">
 		 <span class="help-inline">dd.mm.rr</span>
         </div>
        </div>
        <div class="control-group">
         <label class="control-label" for="UNtime{{ id }}">Čas:</label>
         <div class="controls">
-         <input type="text" class="input-xlarge" id="UNtime{{ id }}" name="unloadingTime" value="{{ today|date:"H:i" }}">
+         <input type="text" readonly="readonly" class="input-xlarge" id="UNtime{{ id }}" name="unloadingTime" value="{{ today|date:"H:i" }}">
 		 <span class="help-inline">hh:mm</span>
         </div>
        </div>
