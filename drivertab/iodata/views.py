@@ -128,7 +128,10 @@ def trips(request):
                 return float(unicode)
             except ValueError:
                 split = unicode.split(',')
-                return float(split[0]+'.'+split[1])                           
+                try:
+                    return float(split[0]+'.'+split[1])
+                except IndexError:
+                    raise ValueError                          
 
         makeTripList()
 
