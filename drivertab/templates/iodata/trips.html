@@ -81,10 +81,10 @@
       Poznamka: {{ note }}<br/>
       {% endif %}
       {% if loadingDateTime %}
-	  Naloženo: {{ loadedQuantity }} {{ unit }}, {{ loadingDateTime|date:"d.m.y: H:i" }}, {{ loadingDriver }}<br/>
+	  Naloženo: {{ loadedQuantity|floatformat:2 }} {{ unit }}, {{ loadingDateTime|date:"d.m.y: H:i" }}, {{ loadingDriver }}<br/>
       {% endif %}	  
       {% if unloadingDateTime %}
-	  Vyloženo: {{ unloadedQuantity }} {{ unit }}, {{ unloadingDateTime|date:"d.m.y: H:i" }}, {{ unloadingDriver }}<br/>
+	  Vyloženo: {{ unloadedQuantity|floatformat:2 }} {{ unit }}, {{ unloadingDateTime|date:"d.m.y: H:i" }}, {{ unloadingDriver }}<br/>
       {% endif %}
      </div> 
 	 
@@ -120,7 +120,7 @@
         </div>
        </div>
        <div class="control-group">
-        <label class="control-label" for="pin{{ id }}">PIN:</label>
+        <label class="control-label" for="pin{{ id }}">ID:</label>
         <div class="controls">
          <input type="number" class="input-xlarge" id="pin{{ id }}" name="pin">
         </div>
@@ -159,7 +159,7 @@
        <div class="control-group">
         <label class="control-label" for="UNquantity{{ id }}">Množství:</label>
         <div class="controls">
-         <input type="text" readonly="readonly" class="input-xlarge" id="UNquantity{{ id }}" name="unloadedQuantity" value="{{ loadedQuantity }}">
+         <input type="text" readonly="readonly" class="input-xlarge" id="UNquantity{{ id }}" name="unloadedQuantity" value="{{ loadedQuantity|floatformat:2 }}">
 		 <span class="help-inline">{{ unit }}</span>
         </div>
        </div>
@@ -170,7 +170,7 @@
         </div>
        </div>
        <div class="control-group">
-        <label class="control-label" for="UNpin{{ id }}">PIN:</label>
+        <label class="control-label" for="UNpin{{ id }}">ID:</label>
         <div class="controls">
          <input type="number" class="input-xlarge" id="UNpin{{ id }}" name="pin">
         </div>
