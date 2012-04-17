@@ -12,6 +12,8 @@ urlpatterns = patterns('',
     (r'^$', 'drivertab.iodata.views.login'),
     (r'^logout/', 'drivertab.iodata.views.logout'),
     (r'^trips/$', 'drivertab.iodata.views.trips'),
+    (r'^history/$', 'drivertab.iodata.views.history'),
+    (r'^refresh/$', 'drivertab.iodata.views.refresh'),
     (r'^admin/', include(admin.site.urls)),
     (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 )

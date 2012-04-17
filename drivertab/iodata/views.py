@@ -94,34 +94,34 @@ def trips(request):
                                                                       finished = False,).order_by('-startDate')]
             except Trip.DoesNotExist:
                 tripList = []
-   
+
             try:
-                finishedTripList = [(trip.customer, 
-                                     trip.endCustomer,
-                                     trip.truck, 
-                                     trip.fromPlace,
-                                     trip.toPlace,
-                                     trip.unit,
-                                     trip.loadedQuantity,
-                                     trip.unloadedQuantity,   
-                                     trip.material,
-                                     trip.startDate, 
-                                     trip.deliveryNumber,
-                                     trip.loadingDriver,
-                                     trip.loadingDateTime,
-                                     trip.unloadingDriver,
-                                     trip.unloadingDateTime,
-                                     trip.note,
-                                     trip.id) for trip in Trip.objects.filter(Q(driver1 = driver) | Q(driver2 = driver), 
-                                                                              Q(unloadingDateTime__gte = today.date()),
-                                                                              finished = True).order_by('-unloadingDateTime')]
-            
+                lastTrip = [(trip.customer, 
+                             trip.endCustomer,
+                             trip.truck, 
+                             trip.fromPlace,
+                             trip.toPlace,
+                             trip.unit,
+                             trip.loadedQuantity,
+                             trip.unloadedQuantity,   
+                             trip.material,
+                             trip.startDate, 
+                             trip.deliveryNumber,
+                             trip.loadingDriver,
+                             trip.loadingDateTime,
+                             trip.unloadingDriver,
+                             trip.unloadingDateTime,
+                             trip.note,
+                             trip.id) for trip in Trip.objects.filter(Q(driver1 = driver) | Q(driver2 = driver), 
+                                                                      Q(unloadingDateTime__gte = today.date()),
+                                                                      finished = True,).order_by('-unloadingDateTime')][:1]
             except Trip.DoesNotExist:
-                finishedTripList = []
-            
+                lastTrip = None
+   
+           
             request.session['context']['today'] = today
             request.session['context']['tripList'] = tripList
-            request.session['context']['finishedTripList'] = finishedTripList
+            request.session['context']['lastTrip'] = lastTrip
     
         def toFloat(unicode):
             try:
@@ -132,6 +132,8 @@ def trips(request):
                     return float(split[0]+'.'+split[1])
                 except IndexError:
                     raise ValueError                          
+                
+        request.session['context']['history'] = False
 
         makeTripList()
 
@@ -141,7 +143,7 @@ def trips(request):
                 if (trip[12]) and (trip[14] == None):
                     request.session['context']['loaded'] = True
                     break
-                  
+
         if request.method == 'POST':
              
             if request.POST.get('load_button'):
@@ -155,7 +157,11 @@ def trips(request):
                             try:
                                 loadingDateTime = request.POST.get('loadingDate')+':'+request.POST.get('loadingTime')
                                 trip.loadingDateTime = datetime.datetime.strptime(loadingDateTime, "%d.%m.%y:%H:%M")
-                                trip.loadedQuantity = toFloat(request.POST.get('loadedQuantity'))
+                                lq = toFloat(request.POST.get('loadedQuantity'))
+                                if (lq > 0) and (lq < 100):
+                                    trip.loadedQuantity = toFloat(request.POST.get('loadedQuantity'))
+                                else:
+                                    raise ValueError
                                 trip.deliveryNumber = request.POST.get('deliveryNumber')
                                 trip.loadingDriver = driver
                                 trip.save()
@@ -220,4 +226,62 @@ def trips(request):
     else:
         return HttpResponseRedirect ('/')
 
+
+def refresh(request):
+    if 'error' in request.session['context']:
+        del request.session['context']['error']
+    if request.session['context']['history']:
+        return HttpResponseRedirect ('/history/')
+    else:
+        return HttpResponseRedirect ('/trips/')
+
+def history(request):
+
+
+    if not 'context' in request.session:
+        request.session['context'] = {'logged_in':False}
+        
+    if request.session['context']['logged_in']:
+        
+        request.session['context']['history'] = True
+        today = datetime.datetime.today()
+        driver = request.session['context']['logged_driver']
+        try:
+            finishedTripList = [(trip.customer, 
+                                 trip.endCustomer,
+                                 trip.truck, 
+                                 trip.fromPlace,
+                                 trip.toPlace,
+                                 trip.unit,
+                                 trip.loadedQuantity,
+                                 trip.unloadedQuantity,   
+                                 trip.material,
+                                 trip.startDate, 
+                                 trip.deliveryNumber,
+                                 trip.loadingDriver,
+                                 trip.loadingDateTime,
+                                 trip.unloadingDriver,
+                                 trip.unloadingDateTime,
+                                 trip.note,
+                                 trip.id) for trip in Trip.objects.filter(Q(driver1 = driver) | Q(driver2 = driver), 
+                                                                          Q(unloadingDateTime__gte = today.date()),
+                                                                          finished = True).order_by('-unloadingDateTime')]
+            
+        except Trip.DoesNotExist:
+            finishedTripList = []
+                
+        if 'lastTrip' in request.session['context']:
+            request.session['context']['finishedTripList'] = finishedTripList[1:]
+        else:
+            request.session['context']['finishedTripList'] = finishedTripList
+        request.session['context']['today'] = today
+        fullcontext = {'csrftoken':csrf(request),
+                       'loaded':request.session['context']['loaded']}
     
+        fullcontext.update(request.session['context'])
+        return render_to_response('iodata/trips.html',
+                                  fullcontext,
+                                  context_instance=RequestContext(request))
+        
+    else:
+        return HttpResponseRedirect ('/')

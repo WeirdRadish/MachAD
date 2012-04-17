@@ -35,7 +35,7 @@
  </head>
  <body>
 
-  <div class="navbar navbar-fixed-top">
+  <div class="navbar">
    <div class="navbar-inner">
     <div class="container">
      <a class="brand" href="#">Mach AD</a>
@@ -46,13 +46,58 @@
   <div class="container">
    
    <div class="alert alert-info">
-    Řidič: {{ driver_name }} &nbsp;&nbsp;&nbsp;&nbsp;<a href="/logout/" class="btn btn-warning">Odhlášení</a>
+    Řidič: {{ driver_name }} &nbsp;&nbsp;&nbsp;&nbsp;
+	<a class="btn" href="/refresh/">Načíst</a>
+	{% if not history %}
+	<a class="btn" href="/history/">Historie</a>
+	{% else %}
+	<a class="btn" href="/trips/">Jízdy</a>
+	{% endif %}
+	<a href="/logout/" class="btn btn-danger">Odhlášení</a>
    </div>
    {% if error %}
    <div class="alert alert-error">
     {{ error }}
    </div>
    {% endif %}
+
+{% if not history %}
+
+{% if lastTrip %}
+    {% for customer, endCustomer, truck, fromPlace, toPlace, unit, loadedQuantity, unloadedQuantity, material, startDate,  deliveryNumber, loadingDriver, loadingDateTime, unloadingDriver, unloadingDateTime, note, id in lastTrip %}
+    <div class="well trip" id="{{ id }}">
+     <div class="row-fluid">
+      <div class="span4">
+       Datum: {{ startDate }}<br/>
+       Odkud: {{ fromPlace }}<br/>
+       Kam: {{ toPlace }}<br/>
+       Vůz: {{ truck }}<br/>
+      </div>
+      <div class="span4">
+       Dodavatel: {{ customer }}<br/>
+       Odběratel: {{ endCustomer }}<br/>
+       Materiál: {{ material }}<br/>
+       Dodací list: {{ deliveryNumber }}<br/>
+      </div>
+      <div class="span3">
+       <button class="disabled btn load_unload">Naloženo</button>
+       <br/><br/>
+       <button class="disabled btn load_unload">Vyloženo</button>
+      </div>
+      
+     </div>
+     <div class="row-fluid note">
+     {% if note %}
+      Poznamka: {{ note }}<br/>
+     {% endif %}
+      Naloženo: {{ loadedQuantity }} {{ unit }}, {{ loadingDateTime|date:"d.m.y: H:i" }}, {{ loadingDriver }}<br/>
+      Vyloženo: {{ unloadedQuantity }} {{ unit }}, {{ unloadingDateTime|date:"d.m.y: H:i" }}, {{ unloadingDriver }}<br/>
+     </div> 
+    </div>
+
+   <hr>
+   {% endfor %}
+{% endif %}
 
 {% for customer, endCustomer, truck, fromPlace, toPlace, unit, loadedQuantity, unloadedQuantity, material, startDate,  deliveryNumber, loadingDriver, loadingDateTime, unloadingDriver, unloadingDateTime, note, id in tripList %}
     <div class="well trip" id="{{ id }}">
@@ -89,7 +134,7 @@
      </div> 
 	 
      <div class="well load">
-      <form novalidate action="/trips/" method="post" class="form-horizontal">
+      <form action="/trips/" method="post" class="form-horizontal">
       {% csrf_token %}	
        <h3>Nakládka</h3>
        <div class="control-group">
@@ -110,7 +155,7 @@
         <label class="control-label" for="quantity{{ id }}">Množství:</label>
         <div class="controls">
          <input type="number" class="input-xlarge required" id="quantity{{ id }}" name="loadedQuantity" step="0.01" min="0" pattern="[0-9]{2}[.,][0-9]{2}">
-		 <span class="help-inline">{{ unit }}</span>
+		 <span class="help-inline">12,34 {{ unit }}</span>
         </div>
        </div>
        <div class="control-group">
@@ -139,7 +184,7 @@
      </div>
 
      <div class="well unload">
-      <form novalidate action="/trips/" method="post" class="form-horizontal">
+      <form action="/trips/" method="post" class="form-horizontal">
       {% csrf_token %}
        <h3>Vykládka</h3>
        <div class="control-group">
@@ -160,7 +205,7 @@
         <label class="control-label" for="UNquantity{{ id }}">Množství:</label>
         <div class="controls">
          <input type="text" readonly="readonly" class="input-xlarge" id="UNquantity{{ id }}" name="unloadedQuantity" value="{{ loadedQuantity|floatformat:2 }}">
-		 <span class="help-inline">{{ unit }}</span>
+		 <span class="help-inline">12,34 {{ unit }}</span>
         </div>
        </div>
        <div class="control-group">
@@ -192,7 +237,9 @@
 
    <hr>
 {% endfor %}
+{% endif %}
 
+{% if history %}
 {% for customer, endCustomer, truck, fromPlace, toPlace, unit, loadedQuantity, unloadedQuantity, material, startDate,  deliveryNumber, loadingDriver, loadingDateTime, unloadingDriver, unloadingDateTime, note, id in finishedTripList %}
     <div class="well trip" id="{{ id }}">
      <div class="row-fluid">
@@ -226,6 +273,7 @@
 
    <hr>
 {% endfor %}
+{% endif %}
 
    <footer>
     <p>&copy; Mach AD 2012</p>
